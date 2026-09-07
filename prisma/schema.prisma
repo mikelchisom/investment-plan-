@@ -1,0 +1,263 @@
+// Investment simulation platform — data model.
+//
+// IMPORTANT: This entire application is a DEMO / SIMULATION. Balances, prices,
+// returns, and transactions recorded here never represent real money, real
+// brokerage execution, or real market data. Fields are named plainly (not
+// prefixed with "simulated") to keep the schema production-shaped, but every
+// value that reaches the UI must be rendered with a DEMO/SIMULATION label —
+// see lib/constants.ts.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ---------------------------------------------------------------------------
+// Access control
+// ---------------------------------------------------------------------------
+
+model Role {
+  id          String @id @default(cuid())
+  name        String @unique // "ADMIN" | "USER"
+  description String?
+
+  users User[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model User {
+  id           String  @id @default(cuid())
+  name         String
+  email        String  @unique
+  passwordHash String
+  isActive     Boolean @default(true)
+  image        String?
+
+  roleId String
+  role   Role   @relation(fields: [roleId], references: [id])
+
+  portfolio     Portfolio?
+  investments   UserInvestment[]
+  transactions  Transaction[]
+  notifications Notification[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([roleId])
+}
+
+// ---------------------------------------------------------------------------
+// Investment plans (admin-managed catalog)
+// ---------------------------------------------------------------------------
+
+enum RiskLevel {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+model InvestmentPlan {
+  id          String @id @default(cuid())
+  name        String
+  slug        String @unique
+  description String
+
+  // Demo economics — never tied to a real yield source.
+  minAmount     Decimal   @db.Decimal(14, 2)
+  maxAmount     Decimal?  @db.Decimal(14, 2)
+  returnRateBps Int // simulated return rate in basis points per durationDays (e.g. 850 = 8.50%)
+  durationDays  Int
+  riskLevel     RiskLevel @default(MEDIUM)
+
+  isActive Boolean @default(true)
+
+  investments UserInvestment[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum InvestmentStatus {
+  ACTIVE
+  COMPLETED
+  CANCELLED
+}
+
+model UserInvestment {
+  id String @id @default(cuid())
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  planId String
+  plan   InvestmentPlan @relation(fields: [planId], references: [id])
+
+  principal    Decimal          @db.Decimal(14, 2) // demo amount committed
+  currentValue Decimal          @db.Decimal(14, 2) // demo value including accrued simulated return
+  status       InvestmentStatus @default(ACTIVE)
+
+  startDate DateTime  @default(now())
+  endDate   DateTime?
+
+  transactions Transaction[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@index([planId])
+}
+
+// ---------------------------------------------------------------------------
+// Portfolio (one demo cash/holdings summary per user)
+// ---------------------------------------------------------------------------
+
+model Portfolio {
+  id String @id @default(cuid())
+
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  cashBalance    Decimal @db.Decimal(14, 2) @default(0) // demo available balance
+  totalDeposited Decimal @db.Decimal(14, 2) @default(0)
+  totalInvested  Decimal @db.Decimal(14, 2) @default(0)
+  totalReturns   Decimal @db.Decimal(14, 2) @default(0)
+
+  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())
+}
+
+// ---------------------------------------------------------------------------
+// Simulated market
+// ---------------------------------------------------------------------------
+
+enum AssetType {
+  STOCK
+  CRYPTO
+  COMMODITY
+  INDEX
+}
+
+model Asset {
+  id     String    @id @default(cuid())
+  symbol String    @unique
+  name   String
+  type   AssetType @default(STOCK)
+
+  price         Decimal @db.Decimal(14, 4) // demo price
+  previousPrice Decimal @db.Decimal(14, 4) // demo price at previous tick, for % change display
+
+  isActive Boolean @default(true)
+
+  marketEvents MarketEvent[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum MarketEventCategory {
+  RATE_CHANGE
+  PRICE_MOVE
+  ACCOUNT_ACTIVITY
+  PLATFORM_NEWS
+}
+
+model MarketEvent {
+  id          String              @id @default(cuid())
+  category    MarketEventCategory
+  headline    String
+  description String?
+
+  assetId String?
+  asset   Asset?  @relation(fields: [assetId], references: [id], onDelete: SetNull)
+
+  // Always true in v1 — kept explicit so a future "real feed" source can't be
+  // confused with these seeded/admin-authored demo events.
+  isSimulated Boolean @default(true)
+
+  createdAt DateTime @default(now())
+
+  @@index([assetId])
+  @@index([createdAt])
+}
+
+// ---------------------------------------------------------------------------
+// Transactions & notifications
+// ---------------------------------------------------------------------------
+
+enum TransactionType {
+  DEPOSIT
+  WITHDRAWAL
+  INVESTMENT
+  RETURN
+  ADJUSTMENT
+}
+
+enum TransactionStatus {
+  PENDING
+  COMPLETED
+  FAILED
+}
+
+model Transaction {
+  id String @id @default(cuid())
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  userInvestmentId String?
+  userInvestment   UserInvestment? @relation(fields: [userInvestmentId], references: [id], onDelete: SetNull)
+
+  type        TransactionType
+  status      TransactionStatus @default(COMPLETED)
+  amount      Decimal           @db.Decimal(14, 2)
+  description String?
+  reference   String? @unique // demo reference code shown to the user
+
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([userInvestmentId])
+}
+
+enum NotificationType {
+  INFO
+  SUCCESS
+  WARNING
+  MARKET
+}
+
+model Notification {
+  id String @id @default(cuid())
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  type    NotificationType @default(INFO)
+  title   String
+  message String
+  isRead  Boolean          @default(false)
+
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+}
+
+// ---------------------------------------------------------------------------
+// Platform configuration (admin-editable, key/value)
+// ---------------------------------------------------------------------------
+
+model PlatformSetting {
+  key         String  @id
+  value       String
+  description String?
+
+  updatedAt DateTime @updatedAt
+}
