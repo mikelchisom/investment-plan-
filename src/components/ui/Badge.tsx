@@ -1,6 +1,6 @@
 import { cn } from "@/lib/cn";
 
-type BadgeVariant = "neutral" | "brand" | "success" | "danger" | "warning" | "info" | "demo";
+type BadgeVariant = "neutral" | "brand" | "success" | "danger" | "warning" | "info";
 
 const variantClasses: Record<BadgeVariant, string> = {
   neutral: "bg-surface-muted text-muted border-border",
@@ -9,7 +9,6 @@ const variantClasses: Record<BadgeVariant, string> = {
   danger: "bg-danger-muted text-danger border-transparent",
   warning: "bg-warning-muted text-warning border-transparent",
   info: "bg-info-muted text-info border-transparent",
-  demo: "bg-warning-muted text-warning border-warning/30",
 };
 
 export function Badge({
@@ -31,14 +30,5 @@ export function Badge({
     >
       {children}
     </span>
-  );
-}
-
-export function DemoBadge({ className }: { className?: string }) {
-  return (
-    <Badge variant="demo" className={className}>
-      <span className="h-1.5 w-1.5 rounded-full bg-warning" />
-      DEMO
-    </Badge>
   );
 }

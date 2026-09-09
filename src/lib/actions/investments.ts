@@ -31,15 +31,15 @@ export async function investInPlanAction(
   }
 
   if (amount < toNumber(plan.minAmount)) {
-    return { error: `Minimum demo investment for this plan is ${formatCurrency(plan.minAmount)}.` };
+    return { error: `Minimum investment for this plan is ${formatCurrency(plan.minAmount)}.` };
   }
   if (plan.maxAmount && amount > toNumber(plan.maxAmount)) {
-    return { error: `Maximum demo investment for this plan is ${formatCurrency(plan.maxAmount)}.` };
+    return { error: `Maximum investment for this plan is ${formatCurrency(plan.maxAmount)}.` };
   }
 
   const portfolio = await prisma.portfolio.findUnique({ where: { userId: user.id } });
   if (!portfolio || toNumber(portfolio.cashBalance) < amount) {
-    return { error: "Insufficient simulated balance for this investment." };
+    return { error: "Insufficient balance for this investment." };
   }
 
   const endDate = new Date();
@@ -71,7 +71,7 @@ export async function investInPlanAction(
         type: "INVESTMENT",
         status: "COMPLETED",
         amount,
-        description: `Simulated investment in ${plan.name}`,
+        description: `Investment in ${plan.name}`,
       },
     });
 
@@ -79,8 +79,8 @@ export async function investInPlanAction(
       data: {
         userId: user.id,
         type: "SUCCESS",
-        title: "Simulated investment created",
-        message: `You committed ${formatCurrency(amount)} (demo) to ${plan.name}.`,
+        title: "Investment created",
+        message: `You committed ${formatCurrency(amount)} to ${plan.name}.`,
       },
     });
   });

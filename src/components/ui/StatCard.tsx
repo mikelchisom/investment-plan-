@@ -18,8 +18,8 @@ export function StatCard({
 }) {
   return (
     <Card className={cn("p-5", className)}>
-      <p className="text-sm text-muted">{label}</p>
-      <p className="mt-2 text-2xl font-semibold tracking-tight text-foreground">{value}</p>
+      <p className="text-sm font-medium text-muted">{label}</p>
+      <p className="mt-2 text-3xl font-semibold tracking-tight text-foreground">{value}</p>
       {(delta || hint) && (
         <div className="mt-2 flex items-center gap-2 text-xs">
           {delta && (

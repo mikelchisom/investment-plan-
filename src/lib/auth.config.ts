@@ -21,6 +21,7 @@ export const authConfig = {
       const isAdminRoute = pathname.startsWith("/admin");
       const isUserRoute =
         pathname.startsWith("/dashboard") ||
+        pathname.startsWith("/trade") ||
         pathname.startsWith("/plans") ||
         pathname.startsWith("/portfolio") ||
         pathname.startsWith("/transactions") ||

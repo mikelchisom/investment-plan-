@@ -7,7 +7,7 @@ import { redirect } from "next/navigation";
 import { signIn } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import { signupSchema } from "@/lib/validation/auth";
-import { ROLE_ADMIN, ROLE_USER, STARTING_DEMO_BALANCE } from "@/lib/constants";
+import { ROLE_ADMIN, ROLE_USER, STARTING_BALANCE } from "@/lib/constants";
 
 export type FormState = {
   error?: string;
@@ -53,15 +53,15 @@ export async function signUpAction(
       roleId: userRole.id,
       portfolio: {
         create: {
-          cashBalance: STARTING_DEMO_BALANCE,
-          totalDeposited: STARTING_DEMO_BALANCE,
+          cashBalance: STARTING_BALANCE,
+          totalDeposited: STARTING_BALANCE,
         },
       },
       notifications: {
         create: {
           type: "SUCCESS",
-          title: "Welcome to your simulation account",
-          message: `Your demo account was created with a starting simulated balance of $${STARTING_DEMO_BALANCE.toLocaleString()}. No real money is involved.`,
+          title: "Welcome",
+          message: `Your account was created with a starting balance of $${STARTING_BALANCE.toLocaleString()}.`,
         },
       },
     },

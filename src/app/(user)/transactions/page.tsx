@@ -1,7 +1,6 @@
 import { requireUser } from "@/lib/authz";
 import { prisma } from "@/lib/prisma";
 import { Card, CardContent } from "@/components/ui/Card";
-import { DemoBadge } from "@/components/ui/Badge";
 import { TransactionList } from "@/components/transactions/TransactionList";
 
 export default async function TransactionsPage() {
@@ -15,9 +14,8 @@ export default async function TransactionsPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-wrap items-center justify-between gap-2">
+      <div>
         <h1 className="text-2xl font-semibold text-foreground">Transaction History</h1>
-        <DemoBadge />
       </div>
       <Card>
         <CardContent>

@@ -1,7 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { StatCard } from "@/components/ui/StatCard";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
-import { DemoBadge } from "@/components/ui/Badge";
 import { MarketEventList } from "@/components/market/MarketEventList";
 import { formatCurrency, toNumber } from "@/lib/format";
 
@@ -30,17 +29,16 @@ export default async function AdminOverviewPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-wrap items-center justify-between gap-2">
+      <div>
         <h1 className="text-2xl font-semibold text-foreground">Admin Overview</h1>
-        <DemoBadge />
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <StatCard label="Registered users" value={String(userCount)} />
-        <StatCard label="Simulated AUM" value={formatCurrency(totalAum)} hint="cash + active investments" />
+        <StatCard label="Total AUM" value={formatCurrency(totalAum)} hint="cash + active investments" />
         <StatCard label="Active investments" value={String(activeInvestmentCount)} />
         <StatCard
-          label="Pending demo deposits"
+          label="Pending deposits"
           value={String(pendingDeposits)}
           hint={pendingDeposits > 0 ? "needs review" : undefined}
           deltaTone={pendingDeposits > 0 ? "negative" : "neutral"}
@@ -51,7 +49,7 @@ export default async function AdminOverviewPage() {
         <StatCard label="Active plans" value={String(activePlans)} className="lg:col-span-1" />
         <Card className="lg:col-span-2">
           <CardHeader>
-            <CardTitle>Recent platform activity</CardTitle>
+            <CardTitle>Recent activity</CardTitle>
           </CardHeader>
           <CardContent>
             <MarketEventList events={recentEvents} />

@@ -17,7 +17,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   return (
     <AppShell
       navItems={navItems}
-      brandLabel="Vantage Sim Admin"
+      brandLabel="Vantage Admin"
       userName={admin.name ?? admin.email ?? "Admin"}
       roleLabel="Administrator"
     >

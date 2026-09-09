@@ -1,48 +1,49 @@
 import { requireUser } from "@/lib/authz";
 import { prisma } from "@/lib/prisma";
+import { StatCard } from "@/components/ui/StatCard";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
-import { Alert } from "@/components/ui/Alert";
-import { DemoBadge } from "@/components/ui/Badge";
+import { TransactionList } from "@/components/transactions/TransactionList";
 import { PLATFORM_SETTING_KEYS } from "@/lib/constants";
-import { DepositForm } from "./DepositForm";
+import { formatCurrency } from "@/lib/format";
+import { FundingMethods } from "./FundingMethods";
 
 export default async function DepositPage() {
-  await requireUser();
+  const user = await requireUser();
 
-  const instructions = await prisma.platformSetting.findUnique({
-    where: { key: PLATFORM_SETTING_KEYS.DEPOSIT_INSTRUCTIONS },
-  });
+  const [instructions, portfolio, recentDeposits] = await Promise.all([
+    prisma.platformSetting.findUnique({ where: { key: PLATFORM_SETTING_KEYS.DEPOSIT_INSTRUCTIONS } }),
+    prisma.portfolio.findUnique({ where: { userId: user.id } }),
+    prisma.transaction.findMany({
+      where: { userId: user.id, type: "DEPOSIT" },
+      orderBy: { createdAt: "desc" },
+      take: 10,
+    }),
+  ]);
 
   return (
-    <div className="max-w-xl space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-semibold text-foreground">Deposit — DEMO / SIMULATION</h1>
-        <DemoBadge />
+    <div className="max-w-2xl space-y-6">
+      <div>
+        <h1 className="text-2xl font-semibold text-foreground">Add Funds</h1>
+        <p className="text-sm text-muted">Top up your balance to start investing.</p>
       </div>
 
-      <Alert variant="warning">
-        This is a simulated deposit flow for demonstration purposes only. No real payment is
-        processed, and no real money changes hands. Submitted amounts are recorded as demo
-        transactions pending review.
-      </Alert>
+      <StatCard
+        label="Available balance"
+        value={formatCurrency(portfolio?.cashBalance ?? 0)}
+      />
+
+      <FundingMethods
+        instructions={
+          instructions?.value ?? "Transfer instructions have not been configured yet. Contact support."
+        }
+      />
 
       <Card>
         <CardHeader>
-          <CardTitle>Deposit instructions (demo)</CardTitle>
+          <CardTitle>Recent deposit requests</CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="text-sm text-muted whitespace-pre-line">
-            {instructions?.value ?? "No deposit instructions have been configured yet."}
-          </p>
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Record a simulated deposit</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <DepositForm />
+          <TransactionList transactions={recentDeposits} />
         </CardContent>
       </Card>
     </div>

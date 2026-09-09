@@ -62,7 +62,7 @@ export function PlanForm({
 
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
-          <Label htmlFor="minAmount">Min amount (demo)</Label>
+          <Label htmlFor="minAmount">Minimum amount</Label>
           <Input
             id="minAmount"
             name="minAmount"
@@ -74,7 +74,7 @@ export function PlanForm({
           <FieldError>{state.fieldErrors?.minAmount}</FieldError>
         </div>
         <div>
-          <Label htmlFor="maxAmount">Max amount (demo, optional)</Label>
+          <Label htmlFor="maxAmount">Maximum amount (optional)</Label>
           <Input
             id="maxAmount"
             name="maxAmount"
@@ -88,7 +88,7 @@ export function PlanForm({
 
       <div className="grid gap-4 sm:grid-cols-3">
         <div>
-          <Label htmlFor="returnRateBps">Simulated return (bps)</Label>
+          <Label htmlFor="returnRateBps">Return rate (bps)</Label>
           <Input
             id="returnRateBps"
             name="returnRateBps"

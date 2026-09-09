@@ -1,6 +1,7 @@
+import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { Card, CardContent } from "@/components/ui/Card";
-import { Badge, DemoBadge } from "@/components/ui/Badge";
+import { Badge } from "@/components/ui/Badge";
 import { toNumber } from "@/lib/format";
 import { AssetPriceForm } from "./AssetPriceForm";
 import { ToggleAssetButton } from "./ToggleAssetButton";
@@ -10,14 +11,11 @@ export default async function AdminAssetsPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-wrap items-center justify-between gap-2">
-        <div>
-          <h1 className="text-2xl font-semibold text-foreground">Simulated Asset Prices</h1>
-          <p className="text-sm text-muted">
-            Updating a price automatically records the previous price and posts a market event.
-          </p>
-        </div>
-        <DemoBadge />
+      <div>
+        <h1 className="text-2xl font-semibold text-foreground">Asset Prices</h1>
+        <p className="text-sm text-muted">
+          Updating a price automatically records the previous price and posts a market event.
+        </p>
       </div>
 
       <Card>
@@ -32,6 +30,7 @@ export default async function AdminAssetsPage() {
                   <th className="px-5 py-3 font-medium">Previous</th>
                   <th className="px-5 py-3 font-medium">New price</th>
                   <th className="px-5 py-3 font-medium">Status</th>
+                  <th className="px-5 py-3" />
                   <th className="px-5 py-3" />
                 </tr>
               </thead>
@@ -52,6 +51,14 @@ export default async function AdminAssetsPage() {
                     </td>
                     <td className="px-5 py-3 text-right">
                       <ToggleAssetButton assetId={asset.id} isActive={asset.isActive} />
+                    </td>
+                    <td className="px-5 py-3 text-right">
+                      <Link
+                        href={`/admin/assets/${asset.id}/trade-control`}
+                        className="text-brand hover:underline"
+                      >
+                        Trading controls
+                      </Link>
                     </td>
                   </tr>
                 ))}

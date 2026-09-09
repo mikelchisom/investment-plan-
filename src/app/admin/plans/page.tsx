@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { Card, CardContent } from "@/components/ui/Card";
-import { Badge, DemoBadge } from "@/components/ui/Badge";
+import { Badge } from "@/components/ui/Badge";
 import { LinkButton } from "@/components/ui/Button";
 import { bpsToPercentLabel, formatCurrency } from "@/lib/format";
 import { PlanRowActions } from "./PlanRowActions";
@@ -22,12 +22,9 @@ export default async function AdminPlansPage() {
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <h1 className="text-2xl font-semibold text-foreground">Investment Plans</h1>
-        <div className="flex items-center gap-2">
-          <DemoBadge />
-          <LinkButton href="/admin/plans/new" size="sm">
-            New plan
-          </LinkButton>
-        </div>
+        <LinkButton href="/admin/plans/new" size="sm">
+          New plan
+        </LinkButton>
       </div>
 
       <Card>

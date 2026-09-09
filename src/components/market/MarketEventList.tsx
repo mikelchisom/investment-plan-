@@ -22,7 +22,7 @@ export function MarketEventList({
   events: (MarketEvent & { asset: Asset | null })[];
 }) {
   if (events.length === 0) {
-    return <p className="text-sm text-muted">No simulated market activity yet.</p>;
+    return <p className="text-sm text-muted">No activity yet.</p>;
   }
 
   return (
@@ -37,9 +37,7 @@ export function MarketEventList({
             {event.description && (
               <p className="mt-0.5 text-xs text-muted">{event.description}</p>
             )}
-            <p className="mt-0.5 text-xs text-muted">
-              {relativeTime(event.createdAt)} · simulated event
-            </p>
+            <p className="mt-0.5 text-xs text-muted">{relativeTime(event.createdAt)}</p>
           </div>
         </li>
       ))}

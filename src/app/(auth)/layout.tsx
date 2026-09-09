@@ -6,9 +6,9 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
       <div className="w-full max-w-sm">
         <div className="mb-6 text-center">
           <Link href="/" className="text-lg font-semibold text-foreground">
-            Vantage Sim
+            Vantage
           </Link>
-          <p className="mt-1 text-xs text-muted">Investment simulation platform — demo data only</p>
+          <p className="mt-1 text-xs text-muted">Track and manage your portfolio</p>
         </div>
         {children}
       </div>

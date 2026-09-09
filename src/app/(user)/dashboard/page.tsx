@@ -3,7 +3,6 @@ import { prisma } from "@/lib/prisma";
 import { getPortfolioOverview, getPortfolioHistory } from "@/lib/portfolio";
 import { StatCard } from "@/components/ui/StatCard";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/Card";
-import { DemoBadge } from "@/components/ui/Badge";
 import { PortfolioChart } from "@/components/charts/PortfolioChart";
 import { AssetPriceList } from "@/components/market/AssetPriceList";
 import { MarketEventList } from "@/components/market/MarketEventList";
@@ -33,21 +32,14 @@ export default async function DashboardPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-wrap items-center justify-between gap-2">
-        <div>
-          <h1 className="text-2xl font-semibold text-foreground">Dashboard</h1>
-          <p className="text-sm text-muted">Welcome back, {user.name}.</p>
-        </div>
-        <DemoBadge />
+      <div>
+        <h1 className="text-2xl font-semibold text-foreground">Dashboard</h1>
+        <p className="text-sm text-muted">Welcome back, {user.name}.</p>
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <StatCard
-          label="Total portfolio value"
-          value={formatCurrency(overview.totalPortfolioValue)}
-          hint="demo"
-        />
-        <StatCard label="Available balance" value={formatCurrency(overview.cashBalance)} hint="demo cash" />
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+        <StatCard label="Total portfolio value" value={formatCurrency(overview.totalPortfolioValue)} />
+        <StatCard label="Available balance" value={formatCurrency(overview.cashBalance)} />
         <StatCard
           label="Active investments"
           value={String(overview.activeInvestments.length)}
@@ -58,15 +50,19 @@ export default async function DashboardPage() {
           value={formatCurrency(overview.totalReturns)}
           delta={returnsPositive ? "Positive" : "Negative"}
           deltaTone={returnsPositive ? "positive" : "negative"}
-          hint="simulated"
+        />
+        <StatCard
+          label="Open trades"
+          value={String(overview.openTrades.length)}
+          delta={overview.openTrades.length > 0 ? formatCurrency(overview.openTradesPnl) : undefined}
+          deltaTone={overview.openTradesPnl >= 0 ? "positive" : "negative"}
         />
       </div>
 
       <div className="grid gap-4 lg:grid-cols-3">
         <Card className="lg:col-span-2">
           <CardHeader>
-            <CardTitle>Portfolio value over time (demo)</CardTitle>
-            <DemoBadge />
+            <CardTitle>Portfolio value over time</CardTitle>
           </CardHeader>
           <CardContent>
             <PortfolioChart points={history} />
@@ -75,7 +71,7 @@ export default async function DashboardPage() {
 
         <Card>
           <CardHeader>
-            <CardTitle>Simulated market prices</CardTitle>
+            <CardTitle>Market prices</CardTitle>
           </CardHeader>
           <CardContent className="py-2">
             <AssetPriceList assets={assets} />
@@ -95,7 +91,7 @@ export default async function DashboardPage() {
 
         <Card>
           <CardHeader>
-            <CardTitle>Recent platform activity</CardTitle>
+            <CardTitle>Recent activity</CardTitle>
           </CardHeader>
           <CardContent>
             <MarketEventList events={marketEvents} />

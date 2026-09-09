@@ -46,8 +46,8 @@ export async function adjustUserBalanceAction(
       data: {
         userId,
         type: "INFO",
-        title: "Simulated balance adjusted",
-        message: `An administrator adjusted your demo balance by ${amount >= 0 ? "+" : ""}${formatCurrency(amount)}. Reason: ${reason}`,
+        title: "Balance adjusted",
+        message: `An administrator adjusted your balance by ${amount >= 0 ? "+" : ""}${formatCurrency(amount)}. Reason: ${reason}`,
       },
     }),
   ]);

@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
-import { Badge, DemoBadge } from "@/components/ui/Badge";
+import { Badge } from "@/components/ui/Badge";
 import { formatDateTime } from "@/lib/format";
 import { MarketEventForm } from "./MarketEventForm";
 import { DeleteEventButton } from "./DeleteEventButton";
@@ -27,14 +27,13 @@ export default async function AdminMarketEventsPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-wrap items-center justify-between gap-2">
+      <div>
         <h1 className="text-2xl font-semibold text-foreground">Market Activity / News</h1>
-        <DemoBadge />
       </div>
 
       <Card>
         <CardHeader>
-          <CardTitle>Post a simulated market event</CardTitle>
+          <CardTitle>Post a market update</CardTitle>
         </CardHeader>
         <CardContent>
           <MarketEventForm assets={assets} />

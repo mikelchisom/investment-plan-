@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { Card, CardContent } from "@/components/ui/Card";
-import { Badge, DemoBadge } from "@/components/ui/Badge";
+import { Badge } from "@/components/ui/Badge";
 import { LinkButton } from "@/components/ui/Button";
 import { bpsToPercentLabel, formatCurrency } from "@/lib/format";
 
@@ -18,12 +18,9 @@ export default async function PlansPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-wrap items-center justify-between gap-2">
-        <div>
-          <h1 className="text-2xl font-semibold text-foreground">Investment Plans</h1>
-          <p className="text-sm text-muted">Simulated plans available to invest in with demo funds.</p>
-        </div>
-        <DemoBadge />
+      <div>
+        <h1 className="text-2xl font-semibold text-foreground">Investment Plans</h1>
+        <p className="text-sm text-muted">Choose a plan that fits your goals.</p>
       </div>
 
       {plans.length === 0 ? (
@@ -42,11 +39,11 @@ export default async function PlansPage() {
                   <span className="text-2xl font-semibold text-brand">
                     {bpsToPercentLabel(plan.returnRateBps)}
                   </span>
-                  <span className="text-xs text-muted">simulated / {plan.durationDays} days</span>
+                  <span className="text-xs text-muted">/ {plan.durationDays} days</span>
                 </div>
                 <p className="mt-1 text-xs text-muted">
                   {formatCurrency(plan.minAmount)} min
-                  {plan.maxAmount ? ` · ${formatCurrency(plan.maxAmount)} max` : ""} demo
+                  {plan.maxAmount ? ` · ${formatCurrency(plan.maxAmount)} max` : ""}
                 </p>
                 <LinkButton href={`/plans/${plan.slug}`} className="mt-4">
                   View plan

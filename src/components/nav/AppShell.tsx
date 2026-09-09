@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { signOut } from "next-auth/react";
 import { useState } from "react";
 import { cn } from "@/lib/cn";
-import { DemoBadge } from "@/components/ui/Badge";
+import { PLATFORM_DISCLOSURE } from "@/lib/constants";
 
 export type NavItem = {
   href: string;
@@ -58,7 +58,6 @@ export function AppShell({
       <aside className="hidden w-60 flex-col border-r border-border bg-surface md:flex">
         <div className="flex items-center gap-2 border-b border-border px-4 py-4">
           <span className="text-base font-semibold text-foreground">{brandLabel}</span>
-          <DemoBadge />
         </div>
         {nav}
         <div className="border-t border-border p-4">
@@ -70,6 +69,7 @@ export function AppShell({
           >
             Sign out
           </button>
+          <p className="mt-3 text-[11px] leading-snug text-muted/70">{PLATFORM_DISCLOSURE}</p>
         </div>
       </aside>
 
@@ -86,7 +86,6 @@ export function AppShell({
             </svg>
           </button>
           <span className="text-sm font-semibold">{brandLabel}</span>
-          <DemoBadge />
         </div>
 
         {mobileOpen && (

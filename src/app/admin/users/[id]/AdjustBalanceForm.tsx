@@ -18,7 +18,7 @@ export function AdjustBalanceForm({ userId }: { userId: string }) {
       {state.error && <Alert variant="danger">{state.error}</Alert>}
       <input type="hidden" name="userId" value={userId} />
       <div>
-        <Label htmlFor="amount">Amount (demo, use negative to deduct)</Label>
+        <Label htmlFor="amount">Amount (use negative to deduct)</Label>
         <Input id="amount" name="amount" type="number" step="0.01" required />
         <FieldError>{state.fieldErrors?.amount}</FieldError>
       </div>
@@ -28,7 +28,7 @@ export function AdjustBalanceForm({ userId }: { userId: string }) {
         <FieldError>{state.fieldErrors?.reason}</FieldError>
       </div>
       <Button type="submit" disabled={pending}>
-        {pending ? "Applying…" : "Apply simulated adjustment"}
+        {pending ? "Applying…" : "Apply adjustment"}
       </Button>
     </form>
   );

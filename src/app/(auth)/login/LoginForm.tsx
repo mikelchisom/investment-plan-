@@ -25,9 +25,6 @@ export function LoginForm() {
       <Button type="submit" className="w-full" disabled={pending}>
         {pending ? "Logging in…" : "Log in"}
       </Button>
-      <p className="text-center text-xs text-muted">
-        Demo account: demo@example.com / Demo1234!
-      </p>
     </form>
   );
 }

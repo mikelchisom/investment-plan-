@@ -23,7 +23,7 @@ export function ProfileForm({ name, email }: { name: string; email: string }) {
       <div>
         <Label htmlFor="email">Email</Label>
         <Input id="email" value={email} disabled />
-        <p className="mt-1 text-xs text-muted">Email cannot be changed in this demo.</p>
+        <p className="mt-1 text-xs text-muted">Email cannot be changed.</p>
       </div>
       <Button type="submit" disabled={pending}>
         {pending ? "Saving…" : "Save changes"}

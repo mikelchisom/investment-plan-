@@ -49,7 +49,7 @@ export function MarketEventForm({ assets }: { assets: AssetOption[] }) {
         <Textarea id="description" name="description" rows={2} />
       </div>
       <Button type="submit" disabled={pending}>
-        {pending ? "Posting…" : "Post simulated event"}
+        {pending ? "Posting…" : "Post update"}
       </Button>
     </form>
   );

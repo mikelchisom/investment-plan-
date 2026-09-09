@@ -13,7 +13,7 @@ export default async function SignupPage() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Create your demo account</CardTitle>
+        <CardTitle>Create your account</CardTitle>
       </CardHeader>
       <CardContent>
         <SignupForm />

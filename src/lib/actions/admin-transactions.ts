@@ -28,8 +28,8 @@ export async function approveDepositAction(transactionId: string) {
       data: {
         userId: tx.userId,
         type: "SUCCESS",
-        title: "Simulated deposit confirmed",
-        message: `Your demo deposit of ${formatCurrency(tx.amount)} was confirmed by an administrator and credited to your simulated balance.`,
+        title: "Deposit confirmed",
+        message: `Your deposit of ${formatCurrency(tx.amount)} was confirmed and credited to your balance.`,
       },
     }),
   ]);
@@ -54,8 +54,8 @@ export async function rejectDepositAction(transactionId: string) {
       data: {
         userId: tx.userId,
         type: "WARNING",
-        title: "Simulated deposit rejected",
-        message: `Your demo deposit request of ${formatCurrency(tx.amount)} was rejected by an administrator.`,
+        title: "Deposit rejected",
+        message: `Your deposit request of ${formatCurrency(tx.amount)} was rejected by an administrator.`,
       },
     }),
   ]);

@@ -21,7 +21,7 @@ const negativeTypes = new Set(["WITHDRAWAL", "INVESTMENT"]);
 
 export function TransactionList({ transactions }: { transactions: Transaction[] }) {
   if (transactions.length === 0) {
-    return <p className="text-sm text-muted">No demo transactions yet.</p>;
+    return <p className="text-sm text-muted">No transactions yet.</p>;
   }
 
   return (
@@ -33,7 +33,7 @@ export function TransactionList({ transactions }: { transactions: Transaction[] 
             <th className="py-2 pr-4 font-medium">Description</th>
             <th className="py-2 pr-4 font-medium">Status</th>
             <th className="py-2 pr-4 font-medium">Date</th>
-            <th className="py-2 pl-4 text-right font-medium">Amount (demo)</th>
+            <th className="py-2 pl-4 text-right font-medium">Amount</th>
           </tr>
         </thead>
         <tbody>

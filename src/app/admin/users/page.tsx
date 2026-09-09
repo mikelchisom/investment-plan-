@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { Card, CardContent } from "@/components/ui/Card";
-import { Badge, DemoBadge } from "@/components/ui/Badge";
+import { Badge } from "@/components/ui/Badge";
 import { formatCurrency, formatDate } from "@/lib/format";
 
 export default async function AdminUsersPage() {
@@ -12,9 +12,8 @@ export default async function AdminUsersPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-wrap items-center justify-between gap-2">
+      <div>
         <h1 className="text-2xl font-semibold text-foreground">Users</h1>
-        <DemoBadge />
       </div>
 
       <Card>
@@ -26,7 +25,7 @@ export default async function AdminUsersPage() {
                   <th className="px-5 py-3 font-medium">Name</th>
                   <th className="px-5 py-3 font-medium">Email</th>
                   <th className="px-5 py-3 font-medium">Role</th>
-                  <th className="px-5 py-3 font-medium">Balance (demo)</th>
+                  <th className="px-5 py-3 font-medium">Balance</th>
                   <th className="px-5 py-3 font-medium">Active investments</th>
                   <th className="px-5 py-3 font-medium">Status</th>
                   <th className="px-5 py-3 font-medium">Joined</th>

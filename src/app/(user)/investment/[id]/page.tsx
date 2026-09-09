@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import { requireUser } from "@/lib/authz";
 import { prisma } from "@/lib/prisma";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
-import { Badge, DemoBadge } from "@/components/ui/Badge";
+import { Badge } from "@/components/ui/Badge";
 import { TransactionList } from "@/components/transactions/TransactionList";
 import { bpsToPercentLabel, formatCurrency, formatDate, toNumber } from "@/lib/format";
 
@@ -29,9 +29,8 @@ export default async function InvestmentDetailPage({ params }: { params: Promise
 
   return (
     <div className="max-w-3xl space-y-6">
-      <div className="flex items-center justify-between">
+      <div>
         <h1 className="text-2xl font-semibold text-foreground">{investment.plan.name}</h1>
-        <DemoBadge />
       </div>
 
       <Card>
@@ -42,11 +41,11 @@ export default async function InvestmentDetailPage({ params }: { params: Promise
         <CardContent>
           <div className="grid grid-cols-2 gap-4 text-sm sm:grid-cols-4">
             <div>
-              <p className="text-muted">Principal (demo)</p>
+              <p className="text-muted">Principal</p>
               <p className="font-medium text-foreground">{formatCurrency(investment.principal)}</p>
             </div>
             <div>
-              <p className="text-muted">Current value (demo)</p>
+              <p className="text-muted">Current value</p>
               <p className="font-medium text-foreground">{formatCurrency(investment.currentValue)}</p>
             </div>
             <div>
@@ -57,7 +56,7 @@ export default async function InvestmentDetailPage({ params }: { params: Promise
               </p>
             </div>
             <div>
-              <p className="text-muted">Plan simulated rate</p>
+              <p className="text-muted">Plan rate</p>
               <p className="font-medium text-foreground">{bpsToPercentLabel(investment.plan.returnRateBps)}</p>
             </div>
             <div>

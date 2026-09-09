@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
-import { Badge, DemoBadge } from "@/components/ui/Badge";
+import { Badge } from "@/components/ui/Badge";
 import { TransactionList } from "@/components/transactions/TransactionList";
 import { formatCurrency, formatDate } from "@/lib/format";
 import { AdjustBalanceForm } from "./AdjustBalanceForm";
@@ -34,19 +34,18 @@ export default async function AdminUserDetailPage({ params }: { params: Promise<
           <Badge variant={user.isActive ? "success" : "danger"}>
             {user.isActive ? "Active" : "Disabled"}
           </Badge>
-          <DemoBadge />
         </div>
       </div>
 
       <div className="grid gap-4 sm:grid-cols-3">
         <Card className="p-5">
-          <p className="text-sm text-muted">Demo cash balance</p>
+          <p className="text-sm text-muted">Cash balance</p>
           <p className="mt-2 text-2xl font-semibold text-foreground">
             {user.portfolio ? formatCurrency(user.portfolio.cashBalance) : "—"}
           </p>
         </Card>
         <Card className="p-5">
-          <p className="text-sm text-muted">Total deposited (demo)</p>
+          <p className="text-sm text-muted">Total deposited</p>
           <p className="mt-2 text-2xl font-semibold text-foreground">
             {user.portfolio ? formatCurrency(user.portfolio.totalDeposited) : "—"}
           </p>
@@ -62,7 +61,7 @@ export default async function AdminUserDetailPage({ params }: { params: Promise<
       <div className="grid gap-4 lg:grid-cols-2">
         <Card>
           <CardHeader>
-            <CardTitle>Adjust simulated balance</CardTitle>
+            <CardTitle>Adjust balance</CardTitle>
           </CardHeader>
           <CardContent>
             <AdjustBalanceForm userId={user.id} />

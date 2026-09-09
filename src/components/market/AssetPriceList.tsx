@@ -4,7 +4,7 @@ import { cn } from "@/lib/cn";
 
 export function AssetPriceList({ assets }: { assets: Asset[] }) {
   if (assets.length === 0) {
-    return <p className="text-sm text-muted">No simulated assets configured yet.</p>;
+    return <p className="text-sm text-muted">No assets configured yet.</p>;
   }
 
   return (

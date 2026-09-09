@@ -16,7 +16,7 @@ async function main() {
     prisma.role.upsert({
       where: { name: ROLE_USER },
       update: {},
-      create: { name: ROLE_USER, description: "Standard investor (demo) account." },
+      create: { name: ROLE_USER, description: "Standard account." },
     }),
   ]);
 
@@ -39,14 +39,14 @@ async function main() {
   });
   console.log(`Admin user ready: ${admin.email} (password from SEED_ADMIN_PASSWORD env var)`);
 
-  const demoInvestorPasswordHash = await bcrypt.hash("Demo1234!", 12);
+  const testInvestorPasswordHash = await bcrypt.hash("Demo1234!", 12);
   await prisma.user.upsert({
     where: { email: "demo@example.com" },
-    update: {},
+    update: { name: "Test Account" },
     create: {
-      name: "Demo Investor",
+      name: "Test Account",
       email: "demo@example.com",
-      passwordHash: demoInvestorPasswordHash,
+      passwordHash: testInvestorPasswordHash,
       roleId: userRole.id,
       portfolio: {
         create: { cashBalance: 10000, totalDeposited: 10000 },
@@ -54,20 +54,19 @@ async function main() {
       notifications: {
         create: {
           type: "INFO",
-          title: "Sample account",
-          message: "This is a seeded demo account. Balances are simulated.",
+          title: "Welcome",
+          message: "Your account is ready.",
         },
       },
     },
   });
-  console.log("Demo investor ready: demo@example.com / Demo1234!");
+  console.log("Test account ready: demo@example.com / Demo1234!");
 
   const plans = [
     {
       name: "Starter Plan",
       slug: "starter-plan",
-      description:
-        "A low-risk entry plan for exploring the simulation. Steady, modest simulated returns over a short term.",
+      description: "A low-risk entry plan. Steady, modest returns over a short term.",
       minAmount: 100,
       maxAmount: 5000,
       returnRateBps: 400,
@@ -77,8 +76,7 @@ async function main() {
     {
       name: "Growth Plan",
       slug: "growth-plan",
-      description:
-        "A balanced plan aimed at moderate simulated growth over a medium term with medium simulated risk.",
+      description: "A balanced plan aimed at moderate growth over a medium term with medium risk.",
       minAmount: 500,
       maxAmount: 25000,
       returnRateBps: 900,
@@ -88,8 +86,7 @@ async function main() {
     {
       name: "Premium Plan",
       slug: "premium-plan",
-      description:
-        "A higher simulated-return, higher simulated-risk plan for long-term demo scenarios.",
+      description: "A higher-return, higher-risk plan for long-term goals.",
       minAmount: 2000,
       maxAmount: null,
       returnRateBps: 1600,
@@ -101,7 +98,7 @@ async function main() {
   for (const plan of plans) {
     await prisma.investmentPlan.upsert({
       where: { slug: plan.slug },
-      update: {},
+      update: plan,
       create: plan,
     });
   }
@@ -112,49 +109,49 @@ async function main() {
     { symbol: "TNV", name: "TechNova Inc.", type: "STOCK" as const, price: 84.15 },
     { symbol: "GLDX", name: "GoldX Commodity Index", type: "COMMODITY" as const, price: 2312.6 },
     { symbol: "SIMCOIN", name: "SimCoin", type: "CRYPTO" as const, price: 41250.33 },
-    { symbol: "GIDX", name: "Global Demo Index", type: "INDEX" as const, price: 4521.88 },
+    { symbol: "GIDX", name: "Global Index", type: "INDEX" as const, price: 4521.88 },
   ];
 
   for (const asset of assets) {
     await prisma.asset.upsert({
       where: { symbol: asset.symbol },
-      update: {},
+      update: { name: asset.name, type: asset.type },
       create: { ...asset, previousPrice: asset.price },
     });
   }
-  console.log(`Seeded ${assets.length} simulated assets.`);
+  console.log(`Seeded ${assets.length} assets.`);
 
   const abc = await prisma.asset.findUnique({ where: { symbol: "ABC" } });
   const simcoin = await prisma.asset.findUnique({ where: { symbol: "SIMCOIN" } });
 
+  // Market events are a rolling feed, not user data — safe to reset and reseed.
+  await prisma.marketEvent.deleteMany({});
   await prisma.marketEvent.createMany({
     data: [
       {
         category: "RATE_CHANGE",
-        headline: "Simulated platform interest rate increased to 4.2%",
-        description: "The base simulated rate used for new Starter Plan subscriptions was adjusted by the admin team.",
+        headline: "Platform interest rate increased to 4.2%",
+        description: "The base rate used for new Starter Plan subscriptions was adjusted by the admin team.",
       },
       {
         category: "PRICE_MOVE",
-        headline: "ABC shares increased 4.2% in simulated trading",
-        description: "Demo price movement generated for platform activity — not a real market quote.",
+        headline: "ABC shares increased 4.2%",
         assetId: abc?.id,
       },
       {
         category: "PRICE_MOVE",
-        headline: "SimCoin simulated price up 2.1% on the day",
-        description: "Demo price movement generated for platform activity — not a real market quote.",
+        headline: "SimCoin up 2.1% on the day",
         assetId: simcoin?.id,
       },
       {
         category: "PLATFORM_NEWS",
-        headline: "New Growth Plan simulation now available",
-        description: "Admins added a new demo investment plan with a 90-day simulated term.",
+        headline: "New Growth Plan now available",
+        description: "A new 90-day investment plan was added.",
       },
       {
         category: "ACCOUNT_ACTIVITY",
-        headline: "User account activity: new demo signups this week",
-        description: "Aggregate simulated platform activity summary.",
+        headline: "New signups this week",
+        description: "Aggregate platform activity summary.",
       },
     ],
   });
@@ -162,26 +159,29 @@ async function main() {
 
   await prisma.platformSetting.upsert({
     where: { key: PLATFORM_SETTING_KEYS.SITE_NAME },
-    update: {},
-    create: { key: PLATFORM_SETTING_KEYS.SITE_NAME, value: "Vantage Sim", description: "Public site name." },
+    update: { value: "Vantage" },
+    create: { key: PLATFORM_SETTING_KEYS.SITE_NAME, value: "Vantage", description: "Public site name." },
   });
   await prisma.platformSetting.upsert({
     where: { key: PLATFORM_SETTING_KEYS.DEPOSIT_INSTRUCTIONS },
-    update: {},
+    update: {
+      value:
+        "Transfer to:\nBank: First National Bank\nAccount name: Vantage Holdings Ltd\nAccount number: 0123456789\nRouting number: 021000021\n\nInclude your reference code in the transfer memo so we can match it to your account.",
+    },
     create: {
       key: PLATFORM_SETTING_KEYS.DEPOSIT_INSTRUCTIONS,
       value:
-        "This is a DEMO deposit flow. No real payment is processed. In a production deployment, real payment/deposit instructions would be configured here by an administrator.",
-      description: "Shown on the user Deposit page.",
+        "Transfer to:\nBank: First National Bank\nAccount name: Vantage Holdings Ltd\nAccount number: 0123456789\nRouting number: 021000021\n\nInclude your reference code in the transfer memo so we can match it to your account.",
+      description: "Shown on the user deposit page.",
     },
   });
   await prisma.platformSetting.upsert({
     where: { key: PLATFORM_SETTING_KEYS.DEPOSIT_REFERENCE_PREFIX },
-    update: {},
+    update: { value: "DEP" },
     create: {
       key: PLATFORM_SETTING_KEYS.DEPOSIT_REFERENCE_PREFIX,
-      value: "DEMO-DEP",
-      description: "Prefix used when generating demo deposit reference codes.",
+      value: "DEP",
+      description: "Prefix used when generating deposit reference codes.",
     },
   });
   await prisma.platformSetting.upsert({

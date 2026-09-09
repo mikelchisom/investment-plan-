@@ -5,7 +5,7 @@ import { signUpAction, type FormState } from "@/lib/actions/auth";
 import { Label, Input, FieldError } from "@/components/ui/Field";
 import { Button } from "@/components/ui/Button";
 import { Alert } from "@/components/ui/Alert";
-import { STARTING_DEMO_BALANCE } from "@/lib/constants";
+import { STARTING_BALANCE } from "@/lib/constants";
 
 const initialState: FormState = {};
 
@@ -39,7 +39,7 @@ export function SignupForm() {
         {pending ? "Creating account…" : "Create account"}
       </Button>
       <p className="text-center text-xs text-muted">
-        You&apos;ll start with a simulated balance of ${STARTING_DEMO_BALANCE.toLocaleString()} demo cash. No real money involved.
+        Your account opens with a starting balance of ${STARTING_BALANCE.toLocaleString()}.
       </p>
     </form>
   );

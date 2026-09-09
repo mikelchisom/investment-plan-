@@ -108,7 +108,7 @@ export async function deletePlanAction(planId: string) {
     where: { planId, status: "ACTIVE" },
   });
   if (activeInvestments > 0) {
-    throw new Error("Cannot delete a plan with active simulated investments. Disable it instead.");
+    throw new Error("Cannot delete a plan with active investments. Disable it instead.");
   }
 
   await prisma.investmentPlan.delete({ where: { id: planId } });

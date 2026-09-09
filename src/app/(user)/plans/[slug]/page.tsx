@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { requireUser } from "@/lib/authz";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
-import { Badge, DemoBadge } from "@/components/ui/Badge";
+import { Badge } from "@/components/ui/Badge";
 import { bpsToPercentLabel, formatCurrency, toNumber } from "@/lib/format";
 import { InvestForm } from "./InvestForm";
 
@@ -25,21 +25,20 @@ export default async function PlanDetailPage({ params }: { params: Promise<{ slu
 
   return (
     <div className="max-w-2xl space-y-6">
-      <div className="flex items-center justify-between">
+      <div>
         <h1 className="text-2xl font-semibold text-foreground">{plan.name}</h1>
-        <DemoBadge />
       </div>
 
       <Card>
         <CardHeader>
           <CardTitle>Plan details</CardTitle>
-          <Badge variant={riskVariant[plan.riskLevel]}>{plan.riskLevel} risk (simulated)</Badge>
+          <Badge variant={riskVariant[plan.riskLevel]}>{plan.riskLevel} risk</Badge>
         </CardHeader>
         <CardContent className="space-y-4">
           <p className="text-sm text-muted">{plan.description}</p>
           <div className="grid grid-cols-2 gap-4 text-sm sm:grid-cols-3">
             <div>
-              <p className="text-muted">Simulated return</p>
+              <p className="text-muted">Return rate</p>
               <p className="font-medium text-foreground">{bpsToPercentLabel(plan.returnRateBps)}</p>
             </div>
             <div>
@@ -62,7 +61,7 @@ export default async function PlanDetailPage({ params }: { params: Promise<{ slu
 
       <Card>
         <CardHeader>
-          <CardTitle>Invest (simulated)</CardTitle>
+          <CardTitle>Invest</CardTitle>
         </CardHeader>
         <CardContent>
           <InvestForm

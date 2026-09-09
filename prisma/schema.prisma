@@ -46,6 +46,7 @@ model User {
   investments   UserInvestment[]
   transactions  Transaction[]
   notifications Notification[]
+  paperTrades   PaperTrade[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -157,9 +158,62 @@ model Asset {
   isActive Boolean @default(true)
 
   marketEvents MarketEvent[]
+  candles      PriceCandle[]
+  paperTrades  PaperTrade[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+// A price tick on an asset's chart. Created only when an admin pushes the
+// price up or down from the trading-control panel — there is no autonomous
+// price feed; every candle traces back to a deliberate admin action.
+model PriceCandle {
+  id String @id @default(cuid())
+
+  assetId String
+  asset   Asset  @relation(fields: [assetId], references: [id], onDelete: Cascade)
+
+  timestamp DateTime @default(now())
+  open      Decimal  @db.Decimal(14, 4)
+  high      Decimal  @db.Decimal(14, 4)
+  low       Decimal  @db.Decimal(14, 4)
+  close     Decimal  @db.Decimal(14, 4)
+
+  createdAt DateTime @default(now())
+
+  @@index([assetId, timestamp])
+}
+
+enum PaperTradeStatus {
+  OPEN
+  CLOSED
+}
+
+// A user's practice trade against an asset's price chart. Opening a trade
+// moves cash out of the portfolio at the current price; closing it realizes
+// gain/loss back into cash at whatever the price is at close time.
+model PaperTrade {
+  id String @id @default(cuid())
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  assetId String
+  asset   Asset  @relation(fields: [assetId], references: [id])
+
+  quantity   Decimal           @db.Decimal(18, 8)
+  entryPrice Decimal           @db.Decimal(14, 4)
+  exitPrice  Decimal?          @db.Decimal(14, 4)
+  status     PaperTradeStatus  @default(OPEN)
+  pnl        Decimal?          @db.Decimal(14, 2)
+  notes      String?
+
+  openedAt DateTime  @default(now())
+  closedAt DateTime?
+
+  @@index([userId])
+  @@index([assetId])
 }
 
 enum MarketEventCategory {

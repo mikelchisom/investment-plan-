@@ -1,7 +1,7 @@
 import { requireUser } from "@/lib/authz";
 import { prisma } from "@/lib/prisma";
 import { Card, CardContent } from "@/components/ui/Card";
-import { Badge, DemoBadge } from "@/components/ui/Badge";
+import { Badge } from "@/components/ui/Badge";
 import { relativeTime } from "@/lib/format";
 import { MarkReadButton } from "./MarkReadButton";
 import { MarkAllReadButton } from "./MarkAllReadButton";
@@ -26,10 +26,7 @@ export default async function NotificationsPage() {
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <h1 className="text-2xl font-semibold text-foreground">Notifications</h1>
-        <div className="flex items-center gap-2">
-          <DemoBadge />
-          <MarkAllReadButton />
-        </div>
+        <MarkAllReadButton />
       </div>
 
       <Card>

@@ -15,8 +15,8 @@ export function DepositForm() {
   if (state.success) {
     return (
       <Alert variant="success">
-        Your simulated deposit request was recorded and is pending admin confirmation. This is a
-        demo flow — no real payment was processed.
+        Your deposit request was submitted. We&apos;ll credit your balance once it&apos;s
+        confirmed.
       </Alert>
     );
   }
@@ -25,12 +25,12 @@ export function DepositForm() {
     <form action={formAction} className="space-y-3">
       {state.error && <Alert variant="danger">{state.error}</Alert>}
       <div>
-        <Label htmlFor="amount">Demo deposit amount</Label>
+        <Label htmlFor="amount">Amount</Label>
         <Input id="amount" name="amount" type="number" step="0.01" min="0.01" required />
         <FieldError>{state.fieldErrors?.amount}</FieldError>
       </div>
       <Button type="submit" className="w-full" disabled={pending}>
-        {pending ? "Submitting…" : "Record simulated deposit"}
+        {pending ? "Submitting…" : "Submit deposit request"}
       </Button>
     </form>
   );

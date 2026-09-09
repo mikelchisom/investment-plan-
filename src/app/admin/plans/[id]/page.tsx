@@ -1,7 +1,6 @@
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
-import { DemoBadge } from "@/components/ui/Badge";
 import { updatePlanAction } from "@/lib/actions/admin-plans";
 import { PlanForm, type PlanFormValues } from "../PlanForm";
 import { toNumber } from "@/lib/format";
@@ -26,9 +25,8 @@ export default async function EditPlanPage({ params }: { params: Promise<{ id: s
 
   return (
     <div className="max-w-2xl space-y-6">
-      <div className="flex items-center justify-between">
+      <div>
         <h1 className="text-2xl font-semibold text-foreground">Edit Plan</h1>
-        <DemoBadge />
       </div>
       <Card>
         <CardHeader>

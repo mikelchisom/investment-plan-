@@ -23,7 +23,7 @@ export async function requestDepositAction(
   const prefixSetting = await prisma.platformSetting.findUnique({
     where: { key: PLATFORM_SETTING_KEYS.DEPOSIT_REFERENCE_PREFIX },
   });
-  const reference = generateReference(prefixSetting?.value ?? "DEMO-DEP");
+  const reference = generateReference(prefixSetting?.value ?? "DEP");
 
   await prisma.$transaction([
     prisma.transaction.create({
@@ -33,15 +33,15 @@ export async function requestDepositAction(
         status: "PENDING",
         amount: parsed.data.amount,
         reference,
-        description: "Simulated deposit request awaiting admin confirmation",
+        description: "Deposit request awaiting confirmation",
       },
     }),
     prisma.notification.create({
       data: {
         userId: user.id,
         type: "INFO",
-        title: "Demo deposit request submitted",
-        message: `Your simulated deposit request of $${parsed.data.amount.toLocaleString()} (ref ${reference}) is pending review. No real funds are involved.`,
+        title: "Deposit request submitted",
+        message: `Your deposit request of $${parsed.data.amount.toLocaleString()} (ref ${reference}) is pending review.`,
       },
     }),
   ]);

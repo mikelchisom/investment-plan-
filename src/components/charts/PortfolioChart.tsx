@@ -7,8 +7,8 @@ export function PortfolioChart({ points }: { points: { date: string; value: numb
   if (points.length < 2) {
     return (
       <div className="flex h-64 items-center justify-center text-sm text-muted">
-        Not enough simulated activity yet to chart a trend. Make a demo deposit or investment to
-        see this fill in.
+        Not enough activity yet to chart a trend. Make a deposit or investment to see this fill
+        in.
       </div>
     );
   }
@@ -49,7 +49,7 @@ export function PortfolioChart({ points }: { points: { date: string; value: numb
               borderRadius: 8,
               fontSize: 12,
             }}
-            formatter={(value) => [formatCurrency(Number(value)), "Portfolio value (demo)"]}
+            formatter={(value) => [formatCurrency(Number(value)), "Portfolio value"]}
           />
           <Area
             type="monotone"

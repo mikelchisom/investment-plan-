@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
-import { Badge, DemoBadge } from "@/components/ui/Badge";
+import { Badge } from "@/components/ui/Badge";
 import { formatCurrency, formatDateTime } from "@/lib/format";
 import { DepositActions } from "./DepositActions";
 
@@ -34,18 +34,17 @@ export default async function AdminTransactionsPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-wrap items-center justify-between gap-2">
+      <div>
         <h1 className="text-2xl font-semibold text-foreground">Transactions & Deposits</h1>
-        <DemoBadge />
       </div>
 
       <Card>
         <CardHeader>
-          <CardTitle>Pending demo deposits</CardTitle>
+          <CardTitle>Pending deposits</CardTitle>
         </CardHeader>
         <CardContent className="p-0">
           {pendingDeposits.length === 0 ? (
-            <p className="p-5 text-sm text-muted">No pending demo deposits.</p>
+            <p className="p-5 text-sm text-muted">No pending deposits.</p>
           ) : (
             <div className="divide-y divide-border">
               {pendingDeposits.map((tx) => (
@@ -55,7 +54,7 @@ export default async function AdminTransactionsPage() {
                       {tx.user.name} ({tx.user.email})
                     </p>
                     <p className="text-xs text-muted">
-                      {formatCurrency(tx.amount)} demo · {tx.reference} · {formatDateTime(tx.createdAt)}
+                      {formatCurrency(tx.amount)} · {tx.reference} · {formatDateTime(tx.createdAt)}
                     </p>
                   </div>
                   <DepositActions transactionId={tx.id} />
@@ -68,7 +67,7 @@ export default async function AdminTransactionsPage() {
 
       <Card>
         <CardHeader>
-          <CardTitle>All transactions (demo)</CardTitle>
+          <CardTitle>All transactions</CardTitle>
         </CardHeader>
         <CardContent className="p-0">
           <div className="overflow-x-auto">
@@ -78,7 +77,7 @@ export default async function AdminTransactionsPage() {
                   <th className="px-5 py-3 font-medium">User</th>
                   <th className="px-5 py-3 font-medium">Type</th>
                   <th className="px-5 py-3 font-medium">Status</th>
-                  <th className="px-5 py-3 font-medium">Amount (demo)</th>
+                  <th className="px-5 py-3 font-medium">Amount</th>
                   <th className="px-5 py-3 font-medium">Date</th>
                 </tr>
               </thead>

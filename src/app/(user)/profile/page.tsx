@@ -1,6 +1,5 @@
 import { requireUser } from "@/lib/authz";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
-import { DemoBadge } from "@/components/ui/Badge";
 import { ProfileForm } from "./ProfileForm";
 import { PasswordForm } from "./PasswordForm";
 
@@ -9,9 +8,8 @@ export default async function ProfilePage() {
 
   return (
     <div className="max-w-xl space-y-6">
-      <div className="flex items-center justify-between">
+      <div>
         <h1 className="text-2xl font-semibold text-foreground">Profile & Settings</h1>
-        <DemoBadge />
       </div>
 
       <Card>

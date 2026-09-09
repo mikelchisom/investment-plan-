@@ -23,7 +23,7 @@ export function InvestForm({
   const [state, formAction, pending] = useActionState(investInPlanAction, initialState);
 
   if (state.success) {
-    return <Alert variant="success">Simulated investment created. Check your portfolio for details.</Alert>;
+    return <Alert variant="success">Investment created. Check your portfolio for details.</Alert>;
   }
 
   return (
@@ -31,7 +31,7 @@ export function InvestForm({
       {state.error && <Alert variant="danger">{state.error}</Alert>}
       <input type="hidden" name="planId" value={planId} />
       <div>
-        <Label htmlFor="amount">Demo amount to invest</Label>
+        <Label htmlFor="amount">Amount to invest</Label>
         <Input
           id="amount"
           name="amount"
@@ -43,10 +43,10 @@ export function InvestForm({
           required
         />
         <FieldError>{state.fieldErrors?.amount}</FieldError>
-        <p className="mt-1 text-xs text-muted">Available demo balance: ${cashBalance.toLocaleString()}</p>
+        <p className="mt-1 text-xs text-muted">Available balance: ${cashBalance.toLocaleString()}</p>
       </div>
       <Button type="submit" className="w-full" disabled={pending}>
-        {pending ? "Processing…" : "Invest (simulated)"}
+        {pending ? "Processing…" : "Invest"}
       </Button>
     </form>
   );
